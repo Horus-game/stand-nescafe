@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NESCAFÉ — Comunicación y Diseño: Unidad 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8281C;
+    --red-light: #e63226;
+    --cream: #F5F0E8;
+    --dark: #0e0c0c;
+    --dark2: #1a1717;
+    --muted: #8a8279;
+    --gold: #c9a84c;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 80px 40px 60px;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&q=80') center/cover no-repeat;
+    filter: brightness(0.18) saturate(0.6);
+    z-index: 0;
+  }
+
+  .hero-noise {
+    position: absolute; inset: 0; z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .hero-line-top {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--red); z-index: 3;
+  }
+
+  .hero-content { position: relative; z-index: 2; text-align: center; max-width: 860px; }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red-light);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 8vw, 110px);
+    font-weight: 900;
+    line-height: 0.9;
+    color: var(--cream);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+
+  .hero-title span {
+    color: var(--red);
+    font-style: italic;
+  }
+
+  .hero-subtitle {
+    margin-top: 32px;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 6px 18px;
+    border: 1px solid rgba(200, 40, 28, 0.4);
+    color: var(--red-light);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.9s 1s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeUp 1s 1.4s forwards;
+  }
+  .scroll-hint span { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+  .scroll-arrow { width: 1px; height: 48px; background: linear-gradient(to bottom, var(--red), transparent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 90vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section:nth-child(even) { direction: rtl; }
+  .section:nth-child(even) > * { direction: ltr; }
+
+  .section-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.75) saturate(0.8);
+    transition: transform 8s ease, filter 0.6s ease;
+  }
+
+  .section:hover .section-image img {
+    transform: scale(1.04);
+    filter: brightness(0.85) saturate(1);
+  }
+
+  .section-image-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(14,12,12,0.5) 0%, transparent 70%);
+  }
+
+  .section-num-bg {
+    position: absolute;
+    bottom: -20px; right: -10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(200,40,28,0.08);
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .section-body {
+    background: var(--dark2);
+    padding: 72px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-body::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--red);
+    opacity: 0.5;
+  }
+
+  .section-number {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    color: var(--red-light);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 24px;
+  }
+
+  .section-title em {
+    color: var(--red-light);
+    font-style: italic;
+  }
+
+  /* ─── WORD DROP EFFECT ─── */
+  .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(-22px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .word.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 28px;
+    margin-bottom: 8px;
+  }
+
+  .section-text {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: rgba(245, 240, 232, 0.75);
+  }
+
+  .section-text + .section-text { margin-top: 14px; }
+
+  /* ─── ÁRBOL SECTION ─── */
+  .tree-section {
+    background: var(--dark);
+    padding: 100px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tree-section::before {
+    content: 'ÁRBOL';
+    position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 200px; font-weight: 900;
+    color: rgba(200,40,28,0.04);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .tree-label {
+    font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--red-light); margin-bottom: 16px;
+  }
+
+  .tree-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 900;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+
+  .tree-title em {
+    color: var(--red);
+    font-style: italic;
+  }
+
+  .tree-title-anim {
+    opacity: 0;
+    transform: translateY(-18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .tree-title-anim.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .tree-sub {
+    font-size: 13px; font-weight: 300;
+    color: var(--muted); max-width: 480px;
+    margin: 0 auto 52px;
+    line-height: 1.7;
+  }
+
+  .tree-img-wrap {
+    max-width: 820px; margin: 0 auto;
+    border: 1px solid rgba(200,40,28,0.2);
+    box-shadow: 0 0 80px rgba(200,40,28,0.06);
+    position: relative; z-index: 1;
+  }
+
+  .tree-img-wrap img { width: 100%; display: block; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--dark);
+    border-top: 1px solid rgba(200,40,28,0.2);
+    padding: 48px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--red);
+    letter-spacing: 2px;
+  }
+
+  .footer-info {
+    font-size: 11px; font-weight: 300;
+    color: var(--muted); letter-spacing: 1px;
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .section { grid-template-columns: 1fr; min-height: auto; }
+    .section:nth-child(even) { direction: ltr; }
+    .section-image { height: 260px; }
+    .section-body { padding: 48px 32px; }
+    .section-body::before { display: none; }
+    .tree-section { padding: 72px 24px; }
+    .footer { flex-direction: column; align-items: flex-start; }
+    .footer-info { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ──────────── HERO ──────────── -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-line-top"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Comunicación y Diseño · Unidad 2</p>
+    <h1 class="hero-title">NES<span>CAFÉ</span></h1>
+    <p class="hero-subtitle">Diseño de stand · Investigación de marca</p>
+    <span class="hero-tag">NESCAFÉ Clásico Frío — Nueva variedad</span>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</div>
+
+<!-- ──────────── PREGUNTA 1 ──────────── -->
+<div class="section">
+  <div class="section-image">
+    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=900&q=80" alt="Stand de café" loading="lazy">
+    <div class="section-image-overlay"></div>
+    <div class="section-num-bg">1</div>
+  </div>
+  <div class="section-body">
+    <p class="section-number">Pregunta 01 / 06</p>
+    <h2 class="section-title">Situación problema,<br><em>funciones y materiales</em></h2>
+
+    <p class="section-label">Situación problema</p>
+    <p class="section-text anim-text">El desafío para NESCAFÉ es que, al ser una marca masiva y muy conocida, el stand puede caer en algo genérico y poco memorable. En una feria o evento comercial, donde conviven marcas de bebidas, snacks y productos de consumo, un stand que no comunique nada nuevo puede pasar completamente desapercibido, especialmente si lo que se busca es presentar una variedad nueva como NESCAFÉ Clásico Frío.</p>
+
+    <p class="section-label">Funciones que debe cumplir</p>
+    <p class="section-text anim-text">Comunicar la novedad del producto frío y diferenciarlo de la línea caliente clásica. Ofrecer muestras del producto para generar impacto inmediato a través del sabor. Contar con una zona de degustación visible, un área de exhibición de packaging y espacio para material gráfico informativo sobre la nueva variedad.</p>
+
+    <p class="section-label">Cualidades formales y materiales</p>
+    <p class="section-text anim-text">Una estética moderna y fresca, con referencias visuales al frío. Tipografía limpia que dialogue con la identidad de la marca. Materiales livianos: estructuras modulares de aluminio con paneles de PVC o vinilo, iluminación LED fría y mostrador de acero inoxidable o laminado brillante.</p>
+  </div>
+</div>
+
+<!-- ──────────── PREGUNTA 2 ──────────── -->
+<div class="section">
+  <div class="section-image">
+    <img src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=900&q=80" alt="Identidad de marca" loading="lazy">
+    <div class="section-image-overlay"></div>
+    <div class="section-num-bg">2</div>
+  </div>
+  <div class="section-body">
+    <p class="section-number">Pregunta 02 / 06</p>
+    <h2 class="section-title">¿Por qué son<br><em>necesarias estas<br>características?</em></h2>
+
+    <p class="section-text anim-text">Porque NESCAFÉ tiene un posicionamiento muy instalado como café caliente y hogareño, y lanzar una versión fría implica un cambio de percepción en el consumidor. Si el stand visualmente repite los códigos de siempre, el mensaje del producto nuevo no llega.</p>
+
+    <p class="section-text anim-text">El diseño del stand es la primera comunicación del cambio. Si no logra transmitir frescura, modernidad y novedad desde el primer segundo de contacto visual, el producto puede no despertar el interés necesario para diferenciarse de otras bebidas frías ya consolidadas en el mercado.</p>
+  </div>
+</div>
+
+<!-- ──────────── PREGUNTA 3 ──────────── -->
+<div class="section">
+  <div class="section-image">
+    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=80" alt="Feria o evento" loading="lazy">
+    <div class="section-image-overlay"></div>
+    <div class="section-num-bg">3</div>
+  </div>
+  <div class="section-body">
+    <p class="section-number">Pregunta 03 / 06</p>
+    <h2 class="section-title">¿Cuándo y para qué<br><em>se necesita un stand?</em></h2>
+
+    <p class="section-text anim-text">Un stand se necesita en momentos clave de lanzamiento o reposicionamiento de un producto. En el caso de NESCAFÉ Clásico Frío, es fundamental en ferias de consumo masivo, exposiciones gastronómicas o eventos de marcas, donde el consumidor tiene contacto directo con lo nuevo.</p>
+
+    <p class="section-text anim-text">Con el auge de las bebidas RTD (ready to drink) y el café frío como tendencia en crecimiento, la presencia física en eventos permite construir conexión emocional con el producto antes de que llegue a las góndolas. No alcanza con publicidad digital: el stand permite que el consumidor lo pruebe, lo vea, lo huela y lo asocie a una experiencia.</p>
+  </div>
+</div>
+
+<!-- ──────────── PREGUNTA 4 ──────────── -->
+<div class="section">
+  <div class="section-image">
+    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&q=80" alt="Montaje y logística" loading="lazy">
+    <div class="section-image-overlay"></div>
+    <div class="section-num-bg">4</div>
+  </div>
+  <div class="section-body">
+    <p class="section-number">Pregunta 04 / 06</p>
+    <h2 class="section-title">Frecuencia de<br><em>armado y desarmado</em></h2>
+
+    <p class="section-text anim-text">Dependiendo de la estrategia de lanzamiento, podría armarse para eventos puntuales de 2 a 5 días, con posibilidad de reutilización en distintos puntos del país durante la temporada de calor (primavera-verano).</p>
+
+    <p class="section-text anim-text">Por eso el sistema modular es clave: tiene que poder armar y desarmarse en pocas horas sin herramientas especializadas, aguantar traslados, y mantener buena presencia visual aunque ya se haya usado varias veces. No puede depender de materiales frágiles ni de montaje complejo.</p>
+  </div>
+</div>
+
+<!-- ──────────── PREGUNTA 5 ──────────── -->
+<div class="section">
+  <div class="section-image">
+    <img src="https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?w=900&q=80" alt="Evento al aire libre" loading="lazy">
+    <div class="section-image-overlay"></div>
+    <div class="section-num-bg">5</div>
+  </div>
+  <div class="section-body">
+    <p class="section-number">Pregunta 05 / 06</p>
+    <h2 class="section-title">¿Dónde podría<br><em>estar ubicado?</em></h2>
+
+    <p class="section-text anim-text">En ferias de consumo como Expo EAT, eventos universitarios, festivales de verano, playas o espacios al aire libre donde el café frío tenga más relevancia contextual. También en shoppings durante presentaciones de producto, o en supermercados grandes en el marco de un lanzamiento activado.</p>
+
+    <p class="section-text anim-text">Idealmente en zonas de alto tráfico peatonal, cerca de donde circulan consumidores jóvenes de entre 18 y 35 años, que son el público objetivo de esta variedad.</p>
+  </div>
+</div>
+
+<!-- ──────────── PREGUNTA 6 ──────────── -->
+<div class="section">
+  <div class="section-image">
+    <img src="https://images.unsplash.com/photo-1561047029-3000c68339ca?w=900&q=80" alt="Experiencia de consumidor" loading="lazy">
+    <div class="section-image-overlay"></div>
+    <div class="section-num-bg">6</div>
+  </div>
+  <div class="section-body">
+    <p class="section-number">Pregunta 06 / 06</p>
+    <h2 class="section-title">¿Cuáles son las<br><em>expectativas?</em></h2>
+
+    <p class="section-text anim-text">Que el stand logre que el consumidor pruebe el producto y lo asocie a una experiencia positiva antes de verlo en la góndola. Que NESCAFÉ Clásico Frío quede en la mente como una opción real frente a otras bebidas frías. Que la marca gane terreno en un segmento donde todavía no está consolidada.</p>
+
+    <p class="section-text anim-text">También se espera que el stand genere material para redes sociales (fotos, videos), ampliando el alcance más allá de los asistentes físicos. La experiencia de marca tiene que ser lo suficientemente memorable como para que el visitante recomiende el producto aunque no lo compre en el momento.</p>
+  </div>
+</div>
+
+<!-- ──────────── ÁRBOL DE PROBLEMAS ──────────── -->
+<div class="tree-section">
+  <p class="tree-label anim-text">Análisis · Árbol de problemas</p>
+  <h2 class="tree-title tree-title-anim">Lanzar una nueva<br><em>variedad</em></h2>
+  <p class="tree-sub anim-text">Causas, problema central y consecuencias de posicionar NESCAFÉ Clásico Frío en un mercado competitivo.</p>
+  <div class="tree-img-wrap">
+    <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=900&q=80"
+         alt="árbol de problemas placeholder"
+         style="filter:brightness(0.4) saturate(0.5);"
+         id="tree-placeholder">
+    <!-- SVG árbol embebido -->
+    <svg width="100%" viewBox="0 0 680 860" xmlns="http://www.w3.org/2000/svg" style="display:block;background:#111;">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Labels sections -->
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#C8281C" x="340" y="25" text-anchor="middle" letter-spacing="4" opacity="0.8">EFECTOS / CONSECUENCIAS</text>
+      <line x1="40" y1="32" x2="258" y2="32" stroke="#333" stroke-width="0.5"/>
+      <line x1="422" y1="32" x2="640" y2="32" stroke="#333" stroke-width="0.5"/>
+
+      <!-- Efectos row 1 -->
+      <rect x="30" y="46" width="168" height="52" rx="6" fill="#2a1210" stroke="#C8281C" stroke-width="0.8" stroke-opacity="0.6"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#F5C0B0" x="114" y="68" text-anchor="middle">Ventas iniciales bajas</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#a06050" x="114" y="85" text-anchor="middle">No supera expectativas</text>
+
+      <rect x="218" y="46" width="180" height="52" rx="6" fill="#2a1210" stroke="#C8281C" stroke-width="0.8" stroke-opacity="0.6"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#F5C0B0" x="308" y="68" text-anchor="middle">Confusión en el consumidor</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#a06050" x="308" y="85" text-anchor="middle">No entiende la novedad</text>
+
+      <rect x="418" y="46" width="168" height="52" rx="6" fill="#2a1210" stroke="#C8281C" stroke-width="0.8" stroke-opacity="0.6"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#F5C0B0" x="502" y="68" text-anchor="middle">Imagen debilitada</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#a06050" x="502" y="85" text-anchor="middle">Daño al posicionamiento</text>
+
+      <!-- Efectos row 2 -->
+      <rect x="94" y="124" width="188" height="52" rx="6" fill="#241018" stroke="#993356" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#F4B8D0" x="188" y="146" text-anchor="middle">Canibalización interna</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#9a4060" x="188" y="163" text-anchor="middle">Desplaza la línea caliente</text>
+
+      <rect x="306" y="124" width="200" height="52" rx="6" fill="#241018" stroke="#993356" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#F4B8D0" x="406" y="146" text-anchor="middle">La competencia gana terreno</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#9a4060" x="406" y="163" text-anchor="middle">Bebidas frías rivales crecen</text>
+
+      <!-- Connectors to central -->
+      <line x1="114" y1="98" x2="114" y2="184" stroke="#444" stroke-width="0.8"/>
+      <line x1="308" y1="98" x2="308" y2="124" stroke="#444" stroke-width="0.8"/>
+      <line x1="502" y1="98" x2="502" y2="184" stroke="#444" stroke-width="0.8"/>
+      <line x1="114" y1="184" x2="340" y2="226" stroke="#444" stroke-width="0.8"/>
+      <line x1="308" y1="176" x2="340" y2="226" stroke="#444" stroke-width="0.8"/>
+      <line x1="502" y1="184" x2="340" y2="226" stroke="#444" stroke-width="0.8"/>
+
+      <!-- PROBLEMA CENTRAL -->
+      <rect x="108" y="226" width="464" height="68" rx="8" fill="#1e0f0a" stroke="#C8281C" stroke-width="1.5"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="12" fill="#C8281C" x="340" y="249" text-anchor="middle" letter-spacing="2">PROBLEMA CENTRAL</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10.5" fill="#d4a090" x="340" y="268" text-anchor="middle">Dificultad para posicionar NESCAFÉ Clásico Frío como una opción nueva y relevante</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#7a5048" x="340" y="285" text-anchor="middle">en un mercado de bebidas frías ya consolidado</text>
+
+      <!-- Trunk -->
+      <line x1="340" y1="294" x2="340" y2="410" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="340" y1="410" x2="340" y2="476" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- CAUSAS label -->
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#C8281C" x="340" y="844" text-anchor="middle" letter-spacing="4" opacity="0.8">CAUSAS / RAÍCES</text>
+      <line x1="40" y1="832" x2="258" y2="832" stroke="#333" stroke-width="0.5"/>
+      <line x1="422" y1="832" x2="640" y2="832" stroke="#333" stroke-width="0.5"/>
+
+      <!-- Causas nivel 1 - teal tones -->
+      <rect x="30" y="478" width="175" height="52" rx="6" fill="#0a1f18" stroke="#1D9E75" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#9DE8C8" x="117" y="500" text-anchor="middle">Imagen muy arraigada</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#4a9e7a" x="117" y="517" text-anchor="middle">Solo asociada al café caliente</text>
+
+      <rect x="225" y="478" width="190" height="52" rx="6" fill="#0a1f18" stroke="#1D9E75" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#9DE8C8" x="320" y="500" text-anchor="middle">Competencia establecida</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#4a9e7a" x="320" y="517" text-anchor="middle">Cold brew y RTD ya en góndola</text>
+
+      <rect x="435" y="478" width="188" height="52" rx="6" fill="#0a1f18" stroke="#1D9E75" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#9DE8C8" x="529" y="500" text-anchor="middle">Comunicación insuficiente</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#4a9e7a" x="529" y="517" text-anchor="middle">Campaña no llega al público</text>
+
+      <line x1="117" y1="478" x2="117" y2="448" stroke="#333" stroke-width="0.8"/>
+      <line x1="117" y1="448" x2="340" y2="410" stroke="#333" stroke-width="0.8"/>
+      <line x1="320" y1="478" x2="340" y2="410" stroke="#333" stroke-width="0.8"/>
+      <line x1="529" y1="478" x2="529" y2="448" stroke="#333" stroke-width="0.8"/>
+      <line x1="529" y1="448" x2="340" y2="410" stroke="#333" stroke-width="0.8"/>
+
+      <!-- Causas nivel 2 - blue tones -->
+      <rect x="30" y="568" width="175" height="52" rx="6" fill="#0a1220" stroke="#378ADD" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#9EC8F5" x="117" y="590" text-anchor="middle">Hábito de consumo</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#4070a0" x="117" y="607" text-anchor="middle">El café frío no es costumbre</text>
+
+      <rect x="225" y="568" width="190" height="52" rx="6" fill="#0a1220" stroke="#378ADD" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#9EC8F5" x="320" y="590" text-anchor="middle">Precio percibido alto</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#4070a0" x="320" y="607" text-anchor="middle">Frente a otras bebidas frías</text>
+
+      <rect x="435" y="568" width="188" height="52" rx="6" fill="#0a1220" stroke="#378ADD" stroke-width="0.8" stroke-opacity="0.7"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#9EC8F5" x="529" y="590" text-anchor="middle">Pocos puntos de contacto</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#4070a0" x="529" y="607" text-anchor="middle">Sin degustaciones ni stands</text>
+
+      <line x1="117" y1="530" x2="117" y2="568" stroke="#333" stroke-width="0.8"/>
+      <line x1="320" y1="530" x2="320" y2="568" stroke="#333" stroke-width="0.8"/>
+      <line x1="529" y1="530" x2="529" y2="568" stroke="#333" stroke-width="0.8"/>
+
+      <!-- Causas raíz nivel 3 - gray -->
+      <rect x="30" y="658" width="175" height="52" rx="6" fill="#181818" stroke="#555" stroke-width="0.8"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#d0c8be" x="117" y="680" text-anchor="middle">Desconocimiento del target</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#666" x="117" y="697" text-anchor="middle">Público joven no identificado</text>
+
+      <rect x="225" y="658" width="190" height="52" rx="6" fill="#181818" stroke="#555" stroke-width="0.8"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#d0c8be" x="320" y="680" text-anchor="middle">Distribución limitada</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#666" x="320" y="697" text-anchor="middle">No llega a canales clave</text>
+
+      <rect x="435" y="658" width="188" height="52" rx="6" fill="#181818" stroke="#555" stroke-width="0.8"/>
+      <text font-family="'DM Sans',sans-serif" font-weight="500" font-size="11" fill="#d0c8be" x="529" y="680" text-anchor="middle">Poca inversión en activar</text>
+      <text font-family="'DM Sans',sans-serif" font-size="10" fill="#666" x="529" y="697" text-anchor="middle">Sin eventos ni sampling</text>
+
+      <line x1="117" y1="620" x2="117" y2="658" stroke="#333" stroke-width="0.8"/>
+      <line x1="320" y1="620" x2="320" y2="658" stroke="#333" stroke-width="0.8"/>
+      <line x1="529" y1="620" x2="529" y2="658" stroke="#333" stroke-width="0.8"/>
+      <line x1="117" y1="710" x2="117" y2="752" stroke="#333" stroke-width="0.8"/>
+      <line x1="320" y1="710" x2="320" y2="752" stroke="#333" stroke-width="0.8"/>
+      <line x1="529" y1="710" x2="529" y2="752" stroke="#333" stroke-width="0.8"/>
+
+      <!-- Ground -->
+      <rect x="30" y="752" width="620" height="5" rx="2" fill="#2a2a2a"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ──────────── FOOTER ──────────── -->
+<footer class="footer">
+  <div class="footer-brand">NESCAFÉ</div>
+  <div class="footer-info">
+    Comunicación y Diseño · Unidad 2<br>
+    Vieyra Tatiana &nbsp;/&nbsp; Irastorza David
+  </div>
+</footer>
+
+<script>
+  // ─── Word splitter ───
+  document.querySelectorAll('.anim-text').forEach(el => {
+    const text = el.innerHTML;
+    const words = text.split(/(\s+)/);
+    el.innerHTML = words.map(w =>
+      w.trim() === ''
+        ? w
+        : `<span class="word">${w}</span>`
+    ).join('');
+  });
+
+  // ─── IntersectionObserver ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const words = el.querySelectorAll('.word');
+      words.forEach((word, i) => {
+        setTimeout(() => {
+          word.classList.add('visible');
+        }, i * 28);
+      });
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.anim-text').forEach(el => observer.observe(el));
+
+  // tree title separate observer (contains HTML tags, can't use word splitter)
+  const titleObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      titleObs.unobserve(entry.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.tree-title-anim').forEach(el => titleObs.observe(el));
+
+  // ─── Parallax subtle on images ───
+  const imgs = document.querySelectorAll('.section-image img');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    imgs.forEach(img => {
+      const rect = img.closest('.section-image').getBoundingClientRect();
+      const mid = rect.top + rect.height / 2;
+      const offset = (mid - window.innerHeight / 2) * 0.08;
+      img.style.transform = `translateY(${offset}px)`;
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
